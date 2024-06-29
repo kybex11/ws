@@ -1,0 +1,9 @@
+[{
+        "route": "/",
+        "path": "index.html"
+    },
+    {
+        "route": "/about",
+        "path": "about.html"
+    }
+]
