@@ -5,5 +5,9 @@
     {
         "route": "/about",
         "path": "about.html"
+    },
+    {
+        "route": "/faq",
+        "path": "faq.html"
     }
 ]

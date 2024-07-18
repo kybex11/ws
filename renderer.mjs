@@ -60,9 +60,20 @@ process.on('SIGINT', () => {
     process.exit();
 });
 
-if (args.includes('--start')) {
+const timerArg = args.find(arg => arg.startsWith('--timer='));
+
+if (timerArg) {
+    const timerValue = parseInt(timerArg.split('=')[1]);
+    startServer();
+    setTimeout(() => {
+        console.log(chalk.red('Stopping server...\n time is up'));
+
+        process.exit();
+    }, timerValue * 60000);
+} else if (args.includes('--start')) {
     startServer();
 } else {
     console.log(chalk.red('What do you need?'));
-    console.log('Use --start to start the server');
+    console.log('Use --start to start the server\n');
+    console.log('Use --timer=minutes to start the server will stop after the minutes are up')
 }
