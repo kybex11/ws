@@ -5,11 +5,14 @@ import express from 'express';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
+import { WebSocketServer } from 'ws';
+import chokidar from 'chokidar';
 
 const app = express();
 const port = 3000;
 const appDirectory = fs.realpathSync(process.cwd());
 const args = process.argv.slice(2);
+let wss = null;
 
 // Serve static files with correct MIME types
 app.use(express.static(path.join(appDirectory, 'public'), {
@@ -19,6 +22,46 @@ app.use(express.static(path.join(appDirectory, 'public'), {
         }
     }
 }));
+
+// Add WebSocket server for live reload
+function setupWebSocketServer(server) {
+    wss = new WebSocketServer({ server });
+    
+    wss.on('connection', (ws) => {
+        console.log(chalk.blue('Client connected for live reload'));
+        
+        ws.on('close', () => {
+            console.log(chalk.blue('Client disconnected'));
+        });
+    });
+}
+
+// Function to notify all connected clients to reload
+function notifyClientsToReload() {
+    if (wss) {
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send('reload');
+            }
+        });
+    }
+}
+
+// Watch for file changes
+function setupFileWatcher() {
+    const watcher = chokidar.watch(path.join(appDirectory, 'public'), {
+        ignored: /(^|[\/\\])\../,
+        persistent: true
+    });
+
+    watcher.on('change', async (path) => {
+        console.log(chalk.yellow(`File ${path} has been changed`));
+        await configureRoutes();
+        notifyClientsToReload();
+    });
+
+    console.log(chalk.green('File watcher started'));
+}
 
 async function configureRoutes() {
     try {
@@ -95,8 +138,10 @@ function startServer() {
     console.log(chalk.blue("Starting Web Server..."));
 
     app.use(express.json());
-    app.listen(port, () => {
+    const server = app.listen(port, () => {
         configureRoutes();
+        setupWebSocketServer(server);
+        setupFileWatcher();
         console.log(chalk.green("CTRL + CLICK To follow link"));
         console.log(chalk.green(`http://localhost:${port}`));
     });
