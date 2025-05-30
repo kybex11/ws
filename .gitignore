@@ -1,1 +1,19 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
 .npmrc
+
+# Build output
+dist/
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
