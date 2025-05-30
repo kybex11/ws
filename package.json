@@ -1,12 +1,16 @@
 {
-    "name": "ws-app-creator",
+    "name": "@kybex11/ws-app-creator",
     "version": "1.0.1",
     "type": "module",
-    "main": "dev.mjs",
+    "main": "renderer.mjs",
     "bin": {
         "renderer": "renderer.mjs",
         "renderer-cmd": "renderer.cmd",
         "create-ws-app": "create_ws_app.mjs"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kybex11/ws.git"
     },
     "dependencies": {
         "chalk": "^5.3.0",
@@ -23,10 +27,10 @@
         "create_ws_app.mjs",
         "app",
         "renderer.mjs",
-        "renderer.cmd",
-        "dev.mjs"
+        "renderer.cmd"
     ],
     "publishConfig": {
-        "access": "public"
+        "access": "public",
+        "registry": "https://npm.pkg.github.com/"
     }
 }

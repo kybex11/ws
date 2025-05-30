@@ -1,0 +1,3 @@
+poweshell:
+
+$env:GITHUB_TOKEN="github_token_from_developer_settings"
