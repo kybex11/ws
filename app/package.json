@@ -1,0 +1,13 @@
+{
+    "name": "dev-cli",
+    "version": "1.0.0",
+    "main": "renderer.mjs",
+    "dependencies": {
+        "chalk": "^5.3.0",
+        "chokidar": "^4.0.3",
+        "express": "^4.19.2",
+        "fs-extra": "^11.2.0",
+        "os": "^0.1.2",
+        "ws": "^8.18.1"
+    }
+}
